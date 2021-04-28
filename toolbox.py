@@ -28,7 +28,7 @@ def update():
     print(info('Updating submodules...'))
     for submodule in repo.submodules:
         print(green('Updating %s...' % (submodule.name)))
-        submodule.update(init=True)
+        submodule.update(remote=True, merge=True)
 
 
 @click.command()
