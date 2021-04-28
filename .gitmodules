@@ -1,0 +1,3 @@
+[submodule "tools/Empire"]
+	path = tools/Empire
+	url = https://github.com/BC-SECURITY/Empire
