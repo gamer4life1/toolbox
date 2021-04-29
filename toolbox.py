@@ -4,23 +4,29 @@
 import click
 import sys,os,git
 from termcolor import colored, cprint
+import subprocess
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
 
 repo = git.Repo('/opt/toolbox')
 banner = """
-########  #### ##    ##  ######     ###    ######## ####  ######    
-##     ##  ##  ###   ## ##    ##   ## ##      ##    #### ##    ##   
-##     ##  ##  ####  ## ##        ##   ##     ##     ##  ##         
-########   ##  ## ## ## ##       ##     ##    ##    ##    ######    
-##     ##  ##  ##  #### ##       #########    ##               ##   
-##     ##  ##  ##   ### ##    ## ##     ##    ##         ##    ##   
-########  #### ##    ##  ######  ##     ##    ##          ######    
-########  #######   #######  ##       ########   #######  ##     ## 
-   ##    ##     ## ##     ## ##       ##     ## ##     ##  ##   ##  
-   ##    ##     ## ##     ## ##       ##     ## ##     ##   ## ##   
-   ##    ##     ## ##     ## ##       ########  ##     ##    ###    
-   ##    ##     ## ##     ## ##       ##     ## ##     ##   ## ##   
-   ##    ##     ## ##     ## ##       ##     ## ##     ##  ##   ##  
-   ##     #######   #######  ######## ########   #######  ##     ## 
+████████  ████ ██    ██  ██████     ███    ████████ ████  ██████
+██     ██  ██  ███   ██ ██    ██   ██ ██      ██    ████ ██    ██
+██     ██  ██  ████  ██ ██        ██   ██     ██     ██  ██
+████████   ██  ██ ██ ██ ██       ██     ██    ██    ██    ██████
+██     ██  ██  ██  ████ ██       █████████    ██               ██
+██     ██  ██  ██   ███ ██    ██ ██     ██    ██         ██    ██
+████████  ████ ██    ██  ██████  ██     ██    ██          ██████
+
+████████  ███████   ███████  ██       ████████   ███████  ██     ██
+   ██    ██     ██ ██     ██ ██       ██     ██ ██     ██  ██   ██
+   ██    ██     ██ ██     ██ ██       ██     ██ ██     ██   ██ ██
+   ██    ██     ██ ██     ██ ██       ████████  ██     ██    ███
+   ██    ██     ██ ██     ██ ██       ██     ██ ██     ██   ██ ██
+   ██    ██     ██ ██     ██ ██       ██     ██ ██     ██  ██   ██
+   ██     ███████   ███████  ████████ ████████   ███████  ██     ██
 """
 
 
@@ -39,6 +45,24 @@ def error(text):
 @click.group()
 def cli():
     print(banner)
+
+@cli.command()
+def setuptools():
+    if os.getuid() != 0:
+        print(error("You need to run the setup command as root!"))
+        exit(1)
+    print(info("Setting up Empire..."))
+    installempire = subprocess.run(['bash', '/opt/toolbox/tools/Empire/setup/install.sh'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print(installempire)
+#    if installempire.poll() != 0:
+#        print(error("Failed to install Empire!"))
+#        exit(1)
+#    print(good("Installed Empire!"))
+#    print(info("Installing search-that-hash, name-that-hash & ciphey..."))
+#    install("search-that-hash")
+#    install("name-that-hash")
+#    install("ciphey")
+#    print(good("Done!"))
 
 @cli.command()
 def updatetools():
