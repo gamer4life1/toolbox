@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 
 import click
 import sys,os,git
 from termcolor import colored, cprint
 import subprocess
+from simple_term_menu import TerminalMenu
+
 
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
@@ -13,6 +16,28 @@ def install(package):
 repo = git.Repo('/opt/toolbox')
 
 
+banner = colored("████████  ████ ██    ██", 'blue') + colored(" ██████     ███    ████████ ████  ██████", 'red') + '\n' + \
+colored("██     ██  ██  ███   ██", 'blue') + colored(" ██    ██   ██ ██      ██    ████ ██    ██", 'red') + '\n' + \
+colored("██     ██  ██  ████  ██", 'blue') + colored(" ██        ██   ██     ██     ██  ██", 'red') + '\n' + \
+colored("████████   ██  ██ ██ ██", 'blue') + colored(" ██       ██     ██    ██    ██    ██████", 'red') + '\n' + \
+colored("██     ██  ██  ██  ████", 'blue') + colored(" ██       █████████    ██               ██", 'red') + '\n' + \
+colored("██     ██  ██  ██   ███", 'blue') + colored(" ██    ██ ██     ██    ██         ██    ██", 'red') + '\n' + \
+colored("████████  ████ ██    ██", 'blue') + colored("  ██████  ██     ██    ██          ██████", 'red') + '\n' + \
+colored("████████  ███████   ███████  ██       ", 'blue') + colored("████████   ███████  ██     ██", 'red') + '\n' + \
+colored("   ██    ██     ██ ██     ██ ██       ", 'blue') + colored("██     ██ ██     ██  ██   ██", 'red') + '\n' + \
+colored("   ██    ██     ██ ██     ██ ██       ", 'blue') + colored("██     ██ ██     ██   ██ ██", 'red') + '\n' + \
+colored("   ██    ██     ██ ██     ██ ██       ", 'blue') + colored("████████  ██     ██    ███", 'red') + '\n' + \
+colored("   ██    ██     ██ ██     ██ ██       ", 'blue') + colored("██     ██ ██     ██   ██ ██", 'red') + '\n' + \
+colored("   ██    ██     ██ ██     ██ ██       ", 'blue') + colored("██     ██ ██     ██  ██   ██", 'red') + '\n' + \
+colored("   ██     ███████   ███████  ████████ ", 'blue') + colored("████████   ███████  ██     ██", 'red') + '\n'
+
+
+
+compactedbanner1 = "\n████████  ████ ██    ██\n██     ██  ██  ███   ██\n██     ██  ██  ████  ██\n████████   ██  ██ ██ ██\n██     ██  ██  ██  ████\n██     ██  ██  ██   ███\n████████  ████ ██    ██"
+compactedbanner2 = "\n ██████     ███    ████████ ████  ██████\n██    ██   ██ ██      ██    ████ ██    ██\n██        ██   ██     ██     ██  ██\n██       ██     ██    ██    ██    ██████\n██       █████████    ██               ██\n██       █████████    ██               ██\n ██████  ██     ██    ██          ██████"
+compactedbanner3 = "\n████████  ███████   ███████  ██\n   ██    ██     ██ ██     ██ ██\n   ██    ██     ██ ██     ██ ██\n   ██    ██     ██ ██     ██ ██\n   ██    ██     ██ ██     ██ ██\n   ██    ██     ██ ██     ██ ██\n   ██     ███████   ███████  ████████"
+compactedbanner4 = "\n████████   ███████  ██     ██\n██     ██ ██     ██  ██   ██\n██     ██ ██     ██   ██ ██\n████████  ██     ██    ███\n██     ██ ██     ██   ██ ██\n██     ██ ██     ██  ██   ██\n████████   ███████  ██     ██"
+
 banner1 = """
 ████████  ████ ██    ██
 ██     ██  ██  ███   ██
@@ -20,8 +45,7 @@ banner1 = """
 ████████   ██  ██ ██ ██
 ██     ██  ██  ██  ████
 ██     ██  ██  ██   ███
-████████  ████ ██    ██
-"""
+████████  ████ ██    ██"""
 
 
 banner2 = """
@@ -31,8 +55,7 @@ banner2 = """
 ██       ██     ██    ██    ██    ██████
 ██       █████████    ██               ██
 ██       █████████    ██               ██
- ██████  ██     ██    ██          ██████
-"""
+ ██████  ██     ██    ██          ██████"""
 
 banner3 = """
 ████████  ███████   ███████  ██
@@ -41,8 +64,7 @@ banner3 = """
    ██    ██     ██ ██     ██ ██
    ██    ██     ██ ██     ██ ██
    ██    ██     ██ ██     ██ ██
-   ██     ███████   ███████  ████████
-"""
+   ██     ███████   ███████  ████████"""
 
 banner4 = """
 ████████   ███████  ██     ██
@@ -51,8 +73,7 @@ banner4 = """
 ████████  ██     ██    ███
 ██     ██ ██     ██   ██ ██
 ██     ██ ██     ██  ██   ██
-████████   ███████  ██     ██
-"""
+████████   ███████  ██     ██"""
 
 
 def good(text):
@@ -69,10 +90,11 @@ def error(text):
 
 @click.group()
 def cli():
-    print(colored(banner1.rstrip(), 'blue'), end=' ')
-    print(colored(banner2.rstrip(), 'red'), end=' ')
-    print(colored(banner3.rstrip(), 'blue'), end=' ')
-    print(colored(banner4.rstrip(), 'red'), end=' ')
+    # print(colored(compactedbanner1.rstrip(), 'blue'), end='')
+    # print(colored(compactedbanner2.rstrip(), 'red'), end='')
+    # print(colored(compactedbanner3.rstrip(), 'blue'), end='')
+    # print(colored(compactedbanner4.rstrip(), 'red'), end='')
+    print(banner)
 
 @cli.command()
 def setuptools():
@@ -80,17 +102,17 @@ def setuptools():
         print(error("You need to run the setup command as root!"))
         exit(1)
     print(info("Setting up Empire..."))
-    installempire = subprocess.run(['bash', '/opt/toolbox/tools/Empire/setup/install.sh'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print(installempire)
-#    if installempire.poll() != 0:
-#        print(error("Failed to install Empire!"))
-#        exit(1)
-#    print(good("Installed Empire!"))
-#    print(info("Installing search-that-hash, name-that-hash & ciphey..."))
-#    install("search-that-hash")
-#    install("name-that-hash")
-#    install("ciphey")
-#    print(good("Done!"))
+    os.chdir('/opt/toolbox/tools/Empire/setup')
+    installempire = subprocess.run(['bash', './install.sh'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if installempire.returncode != 0:
+        print(error("Failed to install Empire!"))
+        exit(1)
+    print(good("Installed Empire!"))
+    print(info("Installing search-that-hash, name-that-hash & ciphey..."))
+    install("search-that-hash")
+    install("name-that-hash")
+    install("ciphey")
+    print(good("Done!"))
 
 @cli.command()
 def updatetools():
