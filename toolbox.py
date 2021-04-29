@@ -5,7 +5,7 @@ import click
 import sys,os,git
 from termcolor import colored, cprint
 
-repo = git.Repo('.')
+repo = git.Repo('/opt/toolbox')
 banner = """
 ########  #### ##    ##  ######     ###    ######## ####  ######    
 ##     ##  ##  ###   ## ##    ##   ## ##      ##    #### ##    ##   
@@ -41,7 +41,7 @@ def cli():
     print(banner)
 
 @cli.command()
-def update():
+def updatetools():
     print(info('Updating submodules...'))
     for submodule in repo.submodules:
         print(info('Updating %s...' % (submodule.name)))
@@ -51,6 +51,7 @@ def update():
 
 #@click.command()
 #def empire():
+
 
 if __name__ == '__main__':
     cli()
