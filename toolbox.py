@@ -96,23 +96,25 @@ def cli():
     # print(colored(compactedbanner4.rstrip(), 'red'), end='')
     print(banner)
 
-@cli.command()
-def setuptools():
+#@cli.command()
+def setuptools(tool):
     if os.getuid() != 0:
         print(error("You need to run the setup command as root!"))
         exit(1)
-    print(info("Setting up Empire..."))
-    os.chdir('/opt/toolbox/tools/Empire/setup')
-    installempire = subprocess.run(['bash', './install.sh'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    if installempire.returncode != 0:
-        print(error("Failed to install Empire!"))
-        exit(1)
-    print(good("Installed Empire!"))
-    print(info("Installing search-that-hash, name-that-hash & ciphey..."))
-    install("search-that-hash")
-    install("name-that-hash")
-    install("ciphey")
-    print(good("Done!"))
+    if tool == "empire":
+        print(info("Setting up Empire..."))
+        os.chdir('/opt/toolbox/tools/Empire/setup')
+        installempire = subprocess.run(['bash', './install.sh'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if installempire.returncode != 0:
+            print(error("Failed to install Empire!"))
+            exit(1)
+        print(good("Installed Empire!"))
+    elif tool == "search-name-ciphey":
+        print(info("Installing search-that-hash, name-that-hash & ciphey..."))
+        install("search-that-hash")
+        install("name-that-hash")
+        install("ciphey")
+        print(good("Done!"))
 
 @cli.command()
 def updatetools():
